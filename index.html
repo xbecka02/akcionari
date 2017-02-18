@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Databaze akcionaru</title>
+
+    <script src="jquery-1.12.3.js"></script>
+    <script src="table.js"></script>
+    <script src='build/pdfmake.min.js'></script>
+    <script src='build/vfs_fonts.js'></script>
+    <script type="text/javascript" src="tableExport.js"></script>
+    <script type="text/javascript" src="jquery.base64.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+    <script>
+        if( getCookie("state") != "all" && getCookie("state") != "ex" && getCookie("state") != "current" ) {
+            var cookie = getCookie("state");
+            document.cookie="state=all";
+        }
+        var byvalyZamestnanec = -1;
+        var clickedOption = -1;
+    </script>
+
+    <!-- TABULKA S VYSLEDKY -->
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Jméno</th>
+                <th>Rodné číslo</th>
+                <th>Adresa</th>
+                <th>Nominál. hodnota</th>
+                <th>T série</th>
+                <th>D série</th>
+                <th>S série</th>
+            </tr>
+        </thead>
+        <!-- zapati tabulky - vyplnuje JS -->
+        <tfoot>
+        </tfoot>
+        <!-- telo tabulky - vyplnuje JS -->
+        <tbody>
+        </tbody>
+        <!-- vyplnit tabulku -->
+        <script>
+            var select_view = getCookie("state");
+            console.log("select_view now: ", select_view);
+            if(select_view == "all"){
+                console.log("select_view now: ", select_view);
+                fillTableAll();
+            }
+            else if(select_view == "ex"){
+                console.log("select_view now: ", select_view);
+                fillTableEx();
+            }
+            else{
+                console.log("select_view now: ", select_view);
+                fillTableCurrent();
+            }
+        </script>
+    </table>
+
+    <!-- TLACITKO pro expot tabulky -->
+    <div class="menu-div">
+        <button class="menu-button">Exportovat</button>
+        <div class="menu-div-content">
+            <button id="pdf" class="secondmenu-button">PDF</button>
+            <button id="xls" class="secondmenu-button">XLS</button>
+            <button id="letter" class="secondmenu-button">Obálky</button>
+        </div>
+    </div>
+
+    <!-- TLACITKO pro zobrazeni ruznych typu tabulky -->
+    <div class="menu-div">
+        <button class="menu-button">Zobrazit</button>
+        <div class="menu-div-content">
+            <button id="all-acionars" class="secondmenu-button">Všechny</button>
+            <button id="current-acionars" class="secondmenu-button">Současné</button>
+            <button id="ex-acionars" class="secondmenu-button">Bývalé</button>
+        </div>
+    </div>
+
+    <!-- MENU -->
+    <div id="menu">
+        <div id="menu-left">
+            <ul>
+                <li style="color: black; "><b>ID</b></li>
+                <li style="list-style-type:none"><input type="text" id="ID" name="ID"></li>
+                <li style="color: black; "><b>Jméno a příjmení</b></li>
+                <li style="list-style-type:none"><input type="text" id="jmeno" name="jmeno"></li>
+                <li style="color: black; "><b>Rodné číslo</b></li>
+                <li style="list-style-type:none"><input type="text" id="rodne_c" name="rodne_c"></li>
+                <li style="color: black; "><b>Adresa</b></li>
+                <li style="list-style-type:none"><input type="text" id="adresa" name="adresa"></li>
+                <li style="color: black; "><b>Tisícová série</b></li>
+                <li style="list-style-type:none"><input type="text" id="v_tis" name="v_tis"></li>
+                <li style="color: black; "><b>Desetitisícová série</b></li>
+                <li style="list-style-type:none"><input type="text" id="v_10tis" name="v_10tis"></li>
+                <li style="color: black; "><b>Stotisícová série</b></li>
+                <li style="list-style-type:none"><input type="text" id="v_100tis" name="v_100tis"></li>
+                <!--<li style="color: black; "><b>Bývalý akcionář</b></li>-->
+                <!--<li style="list-style-type:none"><input id="check-current" type="checkbox" name="current" ></li>-->
+            </ul>
+            <ul style="list-style-type:none">
+                <li>
+                    <input id="save" type="submit" value="Uložit">
+                    <input id="update" type="submit" value="Změnit">
+                    <input id="delete" type="submit" value="Smazat">
+                </li>
+            </ul>
+        </div>
+
+        <div id="menu-right">
+            <h1 style="font-size: 20px; margin-left: 20px;"><u>Nápověda užívání programu</u></h1>
+            <ul>
+                <li><b>Uložení akcionáře</b></li>
+                <p>
+                    Pro uložení akcionáře je nezbytné vyplnit veškerá pole kromě prvního.
+                    Pole "ID" je při ukládání akcionáře generováno automaticky, proto se
+                    <u>nevyplňuje</u>. Při ukládání série akcií se rozmezí/dvě čísla oddělují pomlčkou: <b>1-15</b>.
+                    Při ukládání více rozmezí je potřeba je oddělit čárkou: <b>1-15, 20-30</b>. Desetinná
+                    čísla se zapisují pomocí tečky: <b>1-1.5</b>.
+                </p>
+                <li><b>Aktualizace akcionáře</b></li>
+                <p>
+                    Pro aktualizaci údajů některého z akcinářů je nezbytné <u>vyplnit</u> pole "ID",
+                    podle kterého je akcionář vyhledán, poté vyplnit jen pole, která mají být
+                    změněna. Bude potřeba znovu zvolit, jestli se jedná o bývalého akcionáře.".
+                </p>
+                <li><b>Smazání akcionáře</b></li>
+                <p>
+                    Pro smazání akcionáře je <u>nezbytné</u> vyplnit pole "ID" a poté smazat.
+                </p>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modal window to choose ex or current employee -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Ukládáte bývalého zaměstnance?</h2>
+            </div>
+            <div class="modal-body">
+                <div id="ex-employee">ANO</div>
+                <div id="current-employee">NE</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        // get the value if I'm saving/changing current or ex employee
+        var exButton = document.getElementById('ex-employee');
+        var currentButton = document.getElementById('current-employee');
+
+        // clicking on ex or current option and call save/update function
+        exButton.onclick = function(){
+            byvalyZamestnanec = 1;
+            modal.style.display = "none";
+            if(clickedOption === "save"){
+                saveFunction();
+            }
+            else if(clickedOption === "update"){
+                updateFunction();
+            }
+        };
+        currentButton.onclick = function(){
+            byvalyZamestnanec = 0;
+            modal.style.display = "none";
+            if(clickedOption === "save"){
+                saveFunction();
+            }
+            else if(clickedOption === "update"){
+                updateFunction();
+            }
+        };
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // open modal window after clicking save or update
+        document.getElementById("save").onclick = function () {
+            clickedOption = "save";
+            modal.style.display = "block";
+        };
+        document.getElementById("update").onclick = function () {
+            clickedOption = "update";
+            modal.style.display = "block";
+        };
+
+    </script>
+
+</body>
+</html>
