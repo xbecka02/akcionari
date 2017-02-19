@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Databaze akcionaru</title>
+    <title>Databáze akcionářů</title>
+    <link rel="icon" href="img/krava.png">
 
     <script src="jquery-1.12.3.js"></script>
     <script src="table.js"></script>
@@ -48,17 +49,16 @@
         <!-- vyplnit tabulku -->
         <script>
             var select_view = getCookie("state");
-            console.log("select_view now: ", select_view);
             if(select_view == "all"){
-                console.log("select_view now: ", select_view);
+                console.log("select_view: ", select_view);
                 fillTableAll();
             }
             else if(select_view == "ex"){
-                console.log("select_view now: ", select_view);
+                console.log("select_view: ", select_view);
                 fillTableEx();
             }
             else{
-                console.log("select_view now: ", select_view);
+                console.log("select_view: ", select_view);
                 fillTableCurrent();
             }
         </script>

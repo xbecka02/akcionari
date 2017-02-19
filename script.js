@@ -27,11 +27,9 @@ function fillTableAll(){
         success:
             function( response_rows_ ){
                 var response_rows = JSON.parse( response_rows_ );
-                console.log("response_rows:", response_rows);
                 for( var i = 0; i < response_rows.length; i++ ) {
                     // byvale akcionare odlisime cervenou barvou
                     if(response_rows[i][9] == 1){
-                        console.log("byvaly");
                         $("#example > tbody").append("<tr><td class='id' style='text-align:center; color: darkred;'>" + response_rows[i][1] +
                             "</td><td class='name' style='text-align:center; color: darkred;'>" + response_rows[i][2] +
                             "</td><td class='rodne_c' style='text-align:center; color: darkred;'>" + response_rows[i][3] +
@@ -55,7 +53,6 @@ function fillTableAll(){
                             "</td></tr>");
                     }
                 }
-                console.log("-> add_columns_all");
                 add_columns("add_columns_all");
             }
     });
@@ -84,7 +81,6 @@ function fillTableEx(){
                         "</td><td class='100tis' style='text-align:center; color: darkred;'>" + response_rows[i][8] +
                         "</td></tr>");
                 }
-                console.log("-> add_columns_ex");
                 add_columns("add_columns_ex");
             }
     });
@@ -112,7 +108,6 @@ function fillTableCurrent(){
                         "</td><td class='100tis' style='text-align:center;'>" + response_rows[i][8] +
                         "</td></tr>");
                 }
-                console.log("-> add_columns_current");
                 add_columns("add_columns_current");
             }
     });
@@ -129,7 +124,6 @@ function add_columns( variant ){
         success:
             function( response_added_ ){
                 var response_added = JSON.parse( response_added_ );
-                console.log("response_added: ", response_added);
 
                 $("#example tfoot").append("<tr><td style='text-align:center;'><b>" + response_added[0] +
                     "</b></td><td><b>-" +
@@ -184,27 +178,24 @@ $( document ).ready(function() {
 
             // prepocitani jednotlivych serii na nominalni hodnotu akcii
             var allVTis = v_tis.split(",");
-            console.log("allVTis: ", allVTis);
             for(var k = 0; k < allVTis.length; k++){
                 var res1tis = allVTis[k].split("-");
                 nominalniHodnota = nominalniHodnota + 1000*(res1tis[1] - res1tis[0]);
-                console.log("res1tis: ", res1tis, ", nominalniHodnota: ", nominalniHodnota);
+                // console.log("res1tis: ", res1tis, ", nominalniHodnota: ", nominalniHodnota);
             }
 
             var allV10Tis = v_10tis.split(",");
-            console.log("allV10Tis: ", allV10Tis);
             for(var k = 0; k < allV10Tis.length; k++){
                 var res10tis = allV10Tis[k].split("-");
                 nominalniHodnota = nominalniHodnota + 10000*(res10tis[1] - res10tis[0]);
-                console.log("res10tis: ", res10tis, ", nominalniHodnota: ", nominalniHodnota);
+                // console.log("res10tis: ", res10tis, ", nominalniHodnota: ", nominalniHodnota);
             }
 
             var allV100Tis = v_100tis.split(",");
-            console.log("allV100Tis: ", allV100Tis);
             for(var k = 0; k < allVTis.length; k++){
                 var res100tis = allV100Tis[k].split("-");
                 nominalniHodnota = nominalniHodnota + 100000*(res100tis[1] - res100tis[0]);
-                console.log("res100tis: ", res100tis, ", nominalniHodnota: ", nominalniHodnota);
+                // console.log("res100tis: ", res100tis, ", nominalniHodnota: ", nominalniHodnota);
             }
             akcie = nominalniHodnota;
 
@@ -405,9 +396,6 @@ function GetCellValuesObalka() {
         usersAddr[y-1] = bdy[y-1][0] + "\n" + bdy[y-1][1];
     }
 
-    console.log("bdy: ", bdy);
-    console.log("usersAddr: ", usersAddr);
-
     var docDefinition = {
         pageSize: 'A5',
         pageOrientation: 'landscape',
@@ -445,7 +433,6 @@ function GetCellValuesObalka() {
 
 // prace s PDF
 function test(){
-    console.log("test function");
     var docDefinition = {
         content: [
             { text: 'Tabulka akcionářů', style: 'header' },
