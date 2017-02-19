@@ -176,8 +176,6 @@ $( document ).ready(function() {
         else                            var v_10tis = $('#v_10tis').val();
         if( $('#v_100tis').val() == "" )var v_100tis = "null";
         else                            var v_100tis = $('#v_100tis').val();
-        // if($('#check-current').is(":checked"))  var byvalyZamestnanec = 1;
-        // else                                    var byvalyZamestnanec = 0;
 
         if( ID != "null" ) {
             alert('Polozka ID musi byt pro ulozeni akcionare prazdna!');
@@ -241,8 +239,6 @@ $( document ).ready(function() {
         else                            var v_10tis = $('#v_10tis').val();
         if( $('#v_100tis').val() == "" )var v_100tis = "null";
         else                            var v_100tis = $('#v_100tis').val();
-        // if($('#check-current').is(":checked"))  var byvalyZamestnanec = 1;
-        // else                                    var byvalyZamestnanec = 0;
 
         if( ID == "null" ) {
             alert("Pro zmenu zadejte ID akcionare!");
@@ -392,7 +388,9 @@ function GetCellValuesPDF() {
             alignment: 'justify'
         }
     };
-    pdfMake.createPdf(docDefinition).download('akcionariLisnickaas.pdf');
+    var currTime = new Date().getTime() / 1000;
+    var pdfName = parseInt(currTime)+"-akcionari.pdf";
+    pdfMake.createPdf(docDefinition).download(pdfName);
 }
 
 function GetCellValuesObalka() {
@@ -418,15 +416,6 @@ function GetCellValuesObalka() {
         content: usersAddr.map(function(item) {
                 return [{text: 'Líšnická a.s.\nLíšnice 204\n561 84, Líšnice\nIČ: 25922921',style: 'header'}, { text: item, style: 'header2', pageBreak: 'after'}]
             }),
-        // content: [
-        //     {text: 'Líšnická a.s.\nLíšnice 204\n561 84, Líšnice\nIČ: 25922921',style: 'header'},
-        //     {
-        //         text: [
-        //             'Jan Bečka\nLíšnice 204\n561 84, Líšnice'
-        //         ],
-        //         style: 'header2'
-        //     }
-        // ],
         styles: {
             header: {
                 fontSize: 14,
@@ -449,7 +438,9 @@ function GetCellValuesObalka() {
             }
         }
     };
-    pdfMake.createPdf(docDefinition).download('akcionariLisnickaasObalky.pdf');
+    var currTime = new Date().getTime() / 1000;
+    var pdfName = parseInt(currTime)+"-obalky.pdf";
+    pdfMake.createPdf(docDefinition).download(pdfName);
 }
 
 // prace s PDF
